@@ -4,14 +4,20 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**
- * Из-за неконтролируемой среды, которую создаёт Random, тесты работают нестабильно.
- * Попробуйте запустить несколько раз, результат выполнения тестов будет меняться.
+ * Тестовая имплементация интерфейса Randomizer
+ * Всегда возвращает значение, переданное в конструкторе
  */
+class TestRandomizer(private val returnValue: Int) : Randomizer {
+
+    override fun nextInt(from: Int, to: Int): Int = returnValue
+}
+
 class MagicBagTest {
 
     @Test
     fun `WHEN get gold coins EXPECT get 0 coins`() {
-        val bag = MagicBag()
+        val testRandomizer = TestRandomizer(0)
+        val bag = MagicBag(testRandomizer)
 
         val actual = bag.getGoldCoins()
 
@@ -19,9 +25,15 @@ class MagicBagTest {
         assertEquals(expected, actual)
     }
 
+    /**
+     * Вариант с созданием анонимного объекта
+     */
     @Test
     fun `WHEN get gold coins EXPECT get 25 coins`() {
-        val bag = MagicBag()
+        val testRandomizer = object : Randomizer {
+            override fun nextInt(from: Int, to: Int): Int = 5
+        }
+        val bag = MagicBag(testRandomizer)
 
         val actual = bag.getGoldCoins()
 

@@ -1,8 +1,17 @@
 package com.sirmeowingtons5.unittestexample.bag
 
-import kotlin.random.Random
 
-class MagicBag {
+/**
+ * Вынесли random как зависимость, передаваемую извне
+ * Для production кода будет передаваться зависимость с нормальным рандомом
+ * Для тестов будет использоваться класс, где мы можем контролировать выдаваемый результат
+ */
+interface Randomizer {
+
+    fun nextInt(from: Int, to: Int): Int
+}
+
+class MagicBag(private val random: Randomizer) {
 
     private companion object {
 
@@ -12,7 +21,7 @@ class MagicBag {
     }
 
     fun getGoldCoins(): Int {
-        val pieces = Random.nextInt(MIN_GOLD_PIECES, MAX_GOLD_PIECES + 1)
+        val pieces = random.nextInt(MIN_GOLD_PIECES, MAX_GOLD_PIECES + 1)
         return pieces * COINS_IN_PIECE
     }
 }
