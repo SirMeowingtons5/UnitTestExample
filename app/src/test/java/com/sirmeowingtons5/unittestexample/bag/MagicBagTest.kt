@@ -2,21 +2,19 @@ package com.sirmeowingtons5.unittestexample.bag
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.mockito.kotlin.any
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 /**
- * Тестовая имплементация интерфейса Randomizer
- * Всегда возвращает значение, переданное в конструкторе
+ * Заменили стабы на моки
  */
-class TestRandomizer(private val returnValue: Int) : Randomizer {
-
-    override fun nextInt(from: Int, to: Int): Int = returnValue
-}
-
 class MagicBagTest {
 
     @Test
     fun `WHEN get gold coins EXPECT get 0 coins`() {
-        val testRandomizer = TestRandomizer(0)
+        val testRandomizer: Randomizer = mock()
+        whenever(testRandomizer.nextInt(any(), any())).thenReturn(0)
         val bag = MagicBag(testRandomizer)
 
         val actual = bag.getGoldCoins()
@@ -26,13 +24,12 @@ class MagicBagTest {
     }
 
     /**
-     * Вариант с созданием анонимного объекта
+     * В этом тесте явно указываем, при каких входящих значениях nextInt вернется ответ
      */
     @Test
     fun `WHEN get gold coins EXPECT get 25 coins`() {
-        val testRandomizer = object : Randomizer {
-            override fun nextInt(from: Int, to: Int): Int = 5
-        }
+        val testRandomizer: Randomizer = mock()
+        whenever(testRandomizer.nextInt(0, 6)).thenReturn(5)
         val bag = MagicBag(testRandomizer)
 
         val actual = bag.getGoldCoins()
