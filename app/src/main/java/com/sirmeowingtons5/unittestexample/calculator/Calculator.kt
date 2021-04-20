@@ -6,5 +6,9 @@ class Calculator {
         multiplicand * multiplier
 
     fun divide(dividend: Float, divisor: Float): Float =
-        dividend / divisor
+        if (divisor != 0f) {
+            dividend / divisor
+        } else {
+            throw IllegalArgumentException("Divisor can't be null")
+        }
 }
